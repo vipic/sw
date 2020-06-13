@@ -4,7 +4,7 @@ this.addEventListener('install', function(event) {
       caches.open('v1').then(function(cache) {
         return cache.addAll([
           '/sw/static/',
-          '/sw/static/style.css',
+          '/sw/static/index.css',
           '/sw/static/index.js',
         ]);
       })
