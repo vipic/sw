@@ -1,4 +1,4 @@
-this.addEventListener('install', function (event) {
+self.addEventListener('install', function (event) {
   console.log('sw is installed')
   event.waitUntil(
     caches.open('v1').then(function (cache) {
@@ -12,10 +12,12 @@ this.addEventListener('install', function (event) {
 });
 
 
-this.addEventListener('fetch', function (event) {
+self.addEventListener('fetch', function (event) {
   event.respondWith(
     caches.match(event.request)
   ).then((response) => {
+    console.log('fetch', event.request)
+    console.log('fetch res: ', response)
     if (response !== undefined) {
       return response
     } else {
