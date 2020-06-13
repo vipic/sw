@@ -30,17 +30,25 @@ self.addEventListener('activate', function (event) {
   );
 });
 
-// 捕获请求并返回缓存数据
-self.addEventListener('fetch', function (event) {
-  console.log('fetch', event.target)
-  event.respondWith(caches.match(event.request).catch(function () {
-    return fetch(event.request);
-  }).then(function (response) {
-    caches.open(VERSION).then(function (cache) {
-      cache.put(event.request, response);
-    });
-    return response.clone();
-  }).catch(function () {
-    return caches.match('./static/test1.png');
-  }));
+self.addEventListener('fetch', function(event) {
+  const requestUrl = new URL(event.request.url);
+  if (requestUrl.origin === location.origin) {
+    if (requestUrl.pathname === '/') {
+      event.respondWith(
+        caches.open(VERSION).then(function(cache) {
+          return fetch(event.request).then(function(networkResponse) {
+            cache.put(event.request, networkResponse.clone());
+            return networkResponse;
+          }).catch(function() {
+            return cache.match(event.request);
+          });
+        })
+      );
+    }
+  }
+  event.respondWith(
+    caches.match(event.request).then(function(response) {
+      return response || fetch(event.request);
+    })
+  );
 });
