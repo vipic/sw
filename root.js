@@ -5,6 +5,7 @@ this.addEventListener('install', function (event) {
       return cache.addAll([
         '/sw/static/index.css',
         '/sw/static/index.js',
+        '/sw/static/test.png',
       ]);
     })
   );

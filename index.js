@@ -14,3 +14,8 @@ if ('serviceWorker' in navigator) {
     console.log('Registration failed with ' + error);
   });
 }
+function loadImg(){
+  const img = document.createElement('img')
+  img.src = './static/test.png'
+  document.body.append(img)
+}
