@@ -15,6 +15,7 @@ self.addEventListener('install', function (event) {
 
 // 缓存更新
 self.addEventListener('activate', function (event) {
+  console.log('active', event)
   event.waitUntil(
     caches.keys().then(function (cacheNames) {
       return Promise.all(
@@ -31,6 +32,7 @@ self.addEventListener('activate', function (event) {
 
 // 捕获请求并返回缓存数据
 self.addEventListener('fetch', function (event) {
+  console.log('fetch', event.target)
   event.respondWith(caches.match(event.request).catch(function () {
     return fetch(event.request);
   }).then(function (response) {
