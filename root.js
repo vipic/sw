@@ -6,6 +6,7 @@ self.addEventListener('install', function (event) {
         '/sw/static/index.css',
         '/sw/static/index.js',
         '/sw/static/test.png',
+        '/sw/static/test1.png',
       ]);
     })
   );
@@ -13,25 +14,11 @@ self.addEventListener('install', function (event) {
 
 
 self.addEventListener('fetch', function (event) {
-  event.respondWith(
-    caches.match(event.request)
-  ).then((response) => {
-    console.log('fetch', event.request)
-    console.log('fetch res: ', response)
-    if (response !== undefined) {
-      return response
-    } else {
-      fetch(event.request).then(res => {
-        let resClone = res.clone();
+  const url = new URL(event.request.url);
 
-        caches.open('v1').then((cache) => {
-          cache.put(event.request, resClone)
-        })
-        return res
-      }).catch(err => {
-        console.error(err)
-      })
-    }
-
-  });
+  // serve the cat SVG from the cache if the request is
+  // same-origin and the path is '/dog.svg'
+  if (url.pathname === '/test.png') {
+    event.respondWith(caches.match('/test1.png'));
+  }
 });
