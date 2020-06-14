@@ -30,26 +30,29 @@ self.addEventListener('activate', function (event) {
   );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
   const requestUrl = new URL(event.request.url);
+  console.group(requestUrl)
   if (requestUrl.origin === location.origin) {
+    console.log('inner', requestUrl.origin, location.origin)
     if (requestUrl.pathname === '/') {
+      console.log('inner inner', requestUrl, pathname)
       event.respondWith(
-        caches.open(VERSION).then(function(cache) {
-          return fetch(event.request).then(function(networkResponse) {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
-          }).catch(function() {
-            return cache.match(event.request);
-          });
-        })
-      );
+        caches.open(VERSION).then(function (cache) {
+            caches.match(event.request).then(function (response) {
+              console.log('match : ', event.request, response)
+              return response || fetch(event.request);
+            })
+          }
+        )
+      )
     }
   }
   event.respondWith(
-    caches.match(event.request).then(function(response) {
+    caches.match(event.request).then(function (response) {
       console.log('match : ', event.request, response)
       return response || fetch(event.request);
     })
   );
+  console.groupEnd(requestUrl)
 });
