@@ -31,8 +31,8 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
   if (event.request.url.includes('index.html')) {
     return fetch(event.request);
-  } else if (event.request.url.includes('test.png')) {
-    return caches.match('/sw/static/test1.png')
+  // } else if (event.request.url.includes('test.png')) {
+  //   return caches.match('/sw/static/test1.png')
   } else {
     event.respondWith(
       caches.match(event.request).then(function (response) {
