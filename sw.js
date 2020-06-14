@@ -33,6 +33,7 @@ self.addEventListener('activate', function (event) {
 self.addEventListener('fetch', function (event) {
   const requestUrl = new URL(event.request.url);
   console.group(requestUrl)
+  console.log(requestUrl)
   if (requestUrl.origin === location.origin) {
     console.log('inner', requestUrl.origin, location.origin)
     if (requestUrl.pathname === '/') {
