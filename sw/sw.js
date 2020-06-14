@@ -1,2 +1,29 @@
-if(!self.define){const e=e=>{"require"!==e&&(e+=".js");let n=Promise.resolve();return r[e]||(n=new Promise(async n=>{if("document"in self){const r=document.createElement("script");r.src=e,document.head.appendChild(r),r.onload=n}else importScripts(e),n()})),n.then(()=>{if(!r[e])throw new Error(`Module ${e} didn’t register its module`);return r[e]})},n=(n,r)=>{Promise.all(n.map(e)).then(e=>r(1===e.length?e[0]:e))},r={require:Promise.resolve(n)};self.define=(n,t,s)=>{r[n]||(r[n]=Promise.resolve().then(()=>{let r={};const o={uri:location.origin+n.slice(1)};return Promise.all(t.map(n=>{switch(n){case"exports":return r;case"module":return o;default:return e(n)}})).then(e=>{const n=s(...e);return r.default||(r.default=n),r})}))}}define("./sw.js",["./workbox-23ce5dd9"],(function(e){"use strict";e.skipWaiting(),e.clientsClaim(),e.registerRoute(/^https:\/\/cdn.ampproject.org/,new e.StaleWhileRevalidate({cacheName:"amp-components",plugins:[new e.CacheableResponsePlugin({statuses:[0,200]})]}),"GET"),e.registerRoute(/\/(.+.html)?$/,new e.NetworkFirst({cacheName:"page",plugins:[new e.ExpirationPlugin({maxAgeSeconds:86400,purgeOnQuotaError:!0})]}),"GET"),e.registerRoute(/.(json|woff2?|ttf|eot|otf)/,new e.CacheFirst({cacheName:"assets",plugins:[new e.ExpirationPlugin({maxAgeSeconds:1209600,purgeOnQuotaError:!0})]}),"GET"),e.registerRoute(/.(jpg|png)/,new e.CacheFirst({cacheName:"img",plugins:[new e.ExpirationPlugin({maxEntries:100,maxAgeSeconds:604800,purgeOnQuotaError:!0})]}),"GET"),e.registerRoute(/^https:\/\/[a-z0-9]+.cloudfront.net/,new e.CacheFirst({cacheName:"cdn-contents",plugins:[new e.ExpirationPlugin({maxAgeSeconds:604800,purgeOnQuotaError:!0})]}),"GET")}));
-//# sourceMappingURL=sw.js.map
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.0.0/workbox-sw.js');
+
+// Note: Ignore the error that Glitch raises about workbox being undefined.
+workbox.setConfig({
+  debug: true,
+});
+
+workbox.precaching.precacheAndRoute([
+  'https://vipic.github.io/sw/static/static.css',
+]);
+
+// Demonstrates using default cache
+workbox.routing.registerRoute(
+  new RegExp('.*\\.(?:js)'),
+  new workbox.strategies.NetworkFirst(),
+);
+
+// Demonstrates a custom cache name for a route.
+workbox.routing.registerRoute(
+  new RegExp('.*\\.(?:png|jpg|jpeg|svg|gif)'),
+  new workbox.strategies.CacheFirst({
+    cacheName: 'image-cache',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 3,
+      }),
+    ],
+  }),
+);
