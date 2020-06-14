@@ -3,8 +3,8 @@ self.addEventListener('install', function (event) {
   event.waitUntil(
     caches.open(VERSION).then(function (cache) {
       return cache.addAll([
-        '/sw/static/index.css',
-        '/sw/static/index.js',
+        '/sw/static/static.css',
+        '/sw/static/static.js',
         '/sw/static/test.png',
         '/sw/static/test1.png',
       ]);
