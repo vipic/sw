@@ -32,7 +32,6 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function(event) {
   const requestUrl = new URL(event.request.url);
-  console.log(requestUrl)
   if (requestUrl.origin === location.origin) {
     if (requestUrl.pathname === '/') {
       event.respondWith(
@@ -49,6 +48,7 @@ self.addEventListener('fetch', function(event) {
   }
   event.respondWith(
     caches.match(event.request).then(function(response) {
+      console.log('match : ', event.request, response)
       return response || fetch(event.request);
     })
   );
