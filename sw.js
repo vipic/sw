@@ -1,6 +1,5 @@
 const VERSION = 'v1'
 self.addEventListener('install', function (event) {
-  console.log('sw is installed')
   event.waitUntil(
     caches.open(VERSION).then(function (cache) {
       return cache.addAll([
@@ -15,7 +14,6 @@ self.addEventListener('install', function (event) {
 
 // 缓存更新
 self.addEventListener('activate', function (event) {
-  console.log('active', event)
   event.waitUntil(
     caches.keys().then(function (cacheNames) {
       return Promise.all(
@@ -32,16 +30,14 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
   const requestUrl = new URL(event.request.url);
-  console.group(requestUrl)
-  console.log(requestUrl)
+  if(requestUrl.includes('index.html')) {
+    return fetch(event.request);
+  }
   if (requestUrl.origin === location.origin) {
-    console.log('inner', requestUrl.origin, location.origin)
     if (requestUrl.pathname === '/') {
-      console.log('inner inner', requestUrl, pathname)
       event.respondWith(
         caches.open(VERSION).then(function (cache) {
             caches.match(event.request).then(function (response) {
-              console.log('match : ', event.request, response)
               return response || fetch(event.request);
             })
           }
@@ -51,9 +47,7 @@ self.addEventListener('fetch', function (event) {
   }
   event.respondWith(
     caches.match(event.request).then(function (response) {
-      console.log('match : ', event.request, response)
       return response || fetch(event.request);
     })
   );
-  console.groupEnd(requestUrl)
 });
