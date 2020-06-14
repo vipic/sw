@@ -30,7 +30,7 @@ self.addEventListener('activate', function (event) {
 
 self.addEventListener('fetch', function (event) {
   const requestUrl = new URL(event.request.url);
-  if(requestUrl.includes('index.html')) {
+  if(event.request.url.includes('index.html')) {
     return fetch(event.request);
   }
   if (requestUrl.origin === location.origin) {
