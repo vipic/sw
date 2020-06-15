@@ -3,6 +3,7 @@ module.exports = {
   globPatterns: [
     '**/*.{html,json,js,css}'
   ],
+  skipWaiting: true,
   swDest: 'sw/sw.js',
 
   // Define runtime caching rules.
