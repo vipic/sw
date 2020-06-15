@@ -8,7 +8,7 @@ if ('serviceWorker' in navigator) {
       console.log('Service worker active');
     }
     // registration worked
-    // console.log('Registration succeeded. Scope is ' + reg.scope);
+    console.log('Registration succeeded. Scope is ' + reg.scope);
   }).catch(function (error) {
     // registration failed
     console.log('Registration failed with ' + error);
